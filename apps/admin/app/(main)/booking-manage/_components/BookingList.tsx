@@ -1,28 +1,18 @@
-import { useState } from "react";
-
 import Pagination from "@/components/Pagination";
+
+import { TicketResponse } from "@/types/ticketType";
 
 import BookingItem from "./BookingItem";
 
-function BookingList() {
-  const generateTickets = (count: number) => {
-    const baseTicket = {
-      depositorName: "이영희",
-      userType: "VIP",
-      showDate: "2024-10-20",
-      phoneNumber: "010-9876-5432",
-      updateDate: "2024-10-19",
-      orderDate: "2024-10-18",
-      ticketStatus: "BEFORE_PAYMENT",
-    };
+interface BookingListProps {
+  tickets: TicketResponse[];
+  page: number;
+  handlePage: (page: number) => void;
+  totalPages: number;
+}
 
-    return Array.from({ length: count }, (_, index) => ({
-      ticketId: index + 1,
-      ...baseTicket,
-    }));
-  };
-
-  const tickets = generateTickets(65);
+function BookingList(props: BookingListProps) {
+  const { tickets, page, handlePage, totalPages } = props;
 
   const headers = [
     "입금자명",
@@ -35,11 +25,7 @@ function BookingList() {
   ];
 
   const limit = 10;
-  const [page, setPage] = useState(1);
-  const offset = (page - 1) * limit;
-
-  const paginatedTickets = tickets.slice(offset, offset + limit);
-  const emptyRows = limit - paginatedTickets.length;
+  const emptyRows = limit - tickets.length;
 
   return (
     <section className="flex flex-col items-center justify-center gap-8">
@@ -59,8 +45,8 @@ function BookingList() {
           </tr>
         </thead>
         <tbody>
-          {paginatedTickets.map(ticket => (
-            <BookingItem key={ticket.ticketId} ticket={ticket} />
+          {tickets.map(ticket => (
+            <BookingItem key={ticket.ticketId} ticket={ticket} page={page} />
           ))}
 
           {emptyRows > 0 &&
@@ -71,12 +57,7 @@ function BookingList() {
             ))}
         </tbody>
       </table>
-      <Pagination
-        total={tickets.length}
-        limit={limit}
-        page={page}
-        setPage={setPage}
-      />
+      <Pagination totalPages={totalPages} page={page} handlePage={handlePage} />
     </section>
   );
 }

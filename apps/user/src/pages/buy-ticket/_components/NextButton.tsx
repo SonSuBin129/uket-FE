@@ -1,5 +1,6 @@
 import { Button } from "@uket/ui/components/ui/button";
 
+
 import { FormType, useTicketStackForm } from "@/hooks/useTicketStackForm";
 
 import { useTicketFlow } from "@/utils/useTicketFlow";
@@ -10,13 +11,14 @@ interface NextButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   activityName: never;
   disabled: boolean;
+  routeUrl?: string;
   params?: {
     form: FormType;
   } & Record<string, unknown>;
 }
 
 const NextButton = (as: NextButtonProps) => {
-  const { activityName, disabled, params, ...props } = as;
+  const { activityName, disabled, params, routeUrl, ...props } = as;
   const { push, pop } = useTicketFlow();
   const { onSubmit } = useTicketStackForm();
 
@@ -29,12 +31,15 @@ const NextButton = (as: NextButtonProps) => {
       pop();
       pop();
       pop();
-      navigate("/", { replace: true });
+      navigate(routeUrl as any, { replace: true });
       return;
     } else if (activityName === "CompleteActivity" && form) {
-      pop();
-      pop();
-      await onSubmit(form.getValues());
+      try {
+        await onSubmit(form.getValues());
+      } finally {
+        pop();
+        pop();
+      }
     }
 
     push(activityName, params || {});

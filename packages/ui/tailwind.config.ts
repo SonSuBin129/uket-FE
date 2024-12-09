@@ -15,7 +15,7 @@ const config = {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "1rem",
       screens: {
         "2xl": "1400px",
       },
@@ -30,7 +30,9 @@ const config = {
         brand: "#7250FD",
         brandHover: "#633cff",
         buttonDisabled: "#17171B",
+        error: "#FD724F",
         formInput: "#D9D9D9",
+        desc: "#5E5E6E",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -96,16 +98,17 @@ const config = {
             transform: "perspective(800px) rotateY(360deg)",
           },
         },
+        "infinite-scroll": {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-200%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "ping-dealy": "ping-delay 3s cubic-bezier(0, 0, 0.2, 1) infinite",
         "rotate-axis": "rotate-axis 4.5s linear infinite",
-      },
-      backgroundImage: {
-        "landing-pattern":
-          "url('/landingBg.png'), linear-gradient(171.65deg, #6343E1 5.82%, #000000 81.67%)",
+        "infinite-scroll": "infinite-scroll 10s linear infinite",
       },
     },
   },
